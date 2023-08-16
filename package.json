@@ -1,0 +1,28 @@
+{
+    "scripts": {
+        "lint:fix": "prettier */*.js \"*/**/*{.js,.ts}\" -w",
+        "lint": "prettier */*.js \"*/**/*{.js,.ts}\" --check"
+    },
+    "dependencies": {
+        "@prism-hq/staking-sdk": "file:../../symmetry/staking-sdk",
+        "@project-serum/anchor": "^0.25.0",
+        "@project-serum/serum": "^0.13.65",
+        "@pythnetwork/client": "^2.7.0",
+        "@solana/solidity": "^0.0.25",
+        "@solana/spl-token": "^0.3.7",
+        "axios": "^0.27.2",
+        "coingecko-api": "^1.0.10",
+        "funds-sdk": "file:funds-sdk",
+        "jsbi": "^4.3.0"
+    },
+    "devDependencies": {
+        "@types/bn.js": "^5.1.0",
+        "@types/chai": "^4.3.0",
+        "@types/mocha": "8.0.0",
+        "chai": "^4.3.4",
+        "mocha": "8.0.0",
+        "prettier": "^2.6.2",
+        "ts-mocha": "^8.0.0",
+        "typescript": "^4.3.5"
+    }
+}
