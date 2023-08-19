@@ -13,10 +13,12 @@ export class UberVest {
     private wallet: Account;
     private connection: Connection;
     private program: Program<typeof IDL>;
+    private dataAccount: PublicKey;
     constructor(wallet: Account, connection: Connection, program: Program<typeof IDL>) {
         this.wallet = wallet;
         this.connection = connection;
         this.program = program;
+        this.dataAccount = new PublicKey("Cw2wyxbtv4cy69VWi71RMMhspwRw9LTZBUvLF2qcwGk8");
     }
 
     static async init(wallet: Account, connection: Connection){
@@ -36,6 +38,15 @@ export class UberVest {
         return new UberVest(wallet, connection, program);
     }
 
+    public async createDataAccount() {
+        let dataAccount = Keypair.generate();
+        let txx = await this.program.methods.new()
+        .accounts({ dataAccount: dataAccount.publicKey })
+        .signers([dataAccount]).rpc();
+        this.dataAccount = dataAccount.publicKey;
+        return txx;
+    }
+
     public async createVestingAccount(
         taker: PublicKey,
         tokenMint: PublicKey,
@@ -46,12 +57,6 @@ export class UberVest {
         interval: number,
         amountPerClaim: number,
     ) {
-        // let dataAccount = Keypair.generate();
-        // let txx = await this.program.methods.new()
-        // .accounts({ dataAccount: dataAccount.publicKey })
-        // .signers([dataAccount]).rpc();
-        // return txx;
-        // create data account if it doesn't exist
         let [pdaAccount, _] = PublicKey.findProgramAddressSync(
             [
                 anchor.utils.bytes.utf8.encode("uber-vest"),
@@ -70,7 +75,7 @@ export class UberVest {
             new BN(interval),
             new BN(amountPerClaim),
         ).accounts({
-            dataAccount: new PublicKey("H2CEmrQ5kCamyxcxf1bP1kxcB5B3PAFFFtQcQAs6yhEc"),
+            dataAccount: new PublicKey("Cw2wyxbtv4cy69VWi71RMMhspwRw9LTZBUvLF2qcwGk8"),
         }).remainingAccounts([
             {pubkey: taker, isWritable: false, isSigner: false},
             {pubkey: tokenMint, isWritable: false, isSigner: false},
@@ -112,7 +117,7 @@ export class UberVest {
             pda,
             new BN(vestId),
         ).accounts({
-            dataAccount: new PublicKey("H2CEmrQ5kCamyxcxf1bP1kxcB5B3PAFFFtQcQAs6yhEc"),
+            dataAccount: this.dataAccount,
         }).remainingAccounts([
             // {pubkey: this.wallet.publicKey, isWritable: true, isSigner: true},
             {pubkey: takerTokenAccount, isWritable: true, isSigner: false},

@@ -85,13 +85,6 @@ contract uber_vest {
         newVestData.amount_per_claim = amount_per_claim;
         newVestData.creation_time = block.timestamp;
         vest_data_list[num] = newVestData;
-
-        print(uint2str(newVestData.amount_of_tokens));
-        print(uint2str(amount_of_tokens));
-
-        print(uint2str(vest_data_list[num].creation_time));
-
-        print(uint2str(num));
         
         num += 1;
         
@@ -115,8 +108,6 @@ contract uber_vest {
         // check that owner of pda_token_account is pda
         // check that pda really belongs to this program
         vestData storage data = vest_data_list[vest_id];
-        print(uint2str(data.creation_time));
-        print(uint2str(vest_data_list[0].creation_time));
         uint64 current_time = block.timestamp;
         // if(taker != data.taker) {
         //     emit LogMessage(taker, data.taker, data.cliff);
@@ -130,7 +121,6 @@ contract uber_vest {
         if(data.last_claimed + data.interval > current_time) {
             revert();
         }
-        print(uint2str(data.creation_time));
 
         data.last_claimed = current_time;
 
@@ -149,33 +139,4 @@ contract uber_vest {
 
         SplToken.transfer_pda(pda_token_account, taker_token_account, pda, transfer_amount, bum);
     }
-
-    function uint2str(
-        uint256 _i
-        )
-        internal
-        pure
-        returns (string memory str)
-        {
-        if (_i == 0)
-        {
-            return "0";
-        }
-        uint256 j = _i;
-        uint256 length = 0;
-        while (j != 0)
-        {
-            length++;
-            j /= 10;
-        }
-        bytes memory bstr = new bytes(length);
-        uint256 k = length;
-        j = _i;
-        while (j != 0)
-        {
-            bstr[--k] = bytes1(uint8(48 + j % 10));
-            j /= 10;
-        }
-        str = string(bstr);
-        }
 }
