@@ -85,32 +85,11 @@
       "args": []
     },
     {
-      "name": "create_pda_token_account",
-      "accounts": [
-        {
-          "name": "dataAccount",
-          "isMut": true,
-          "isSigner": false,
-          "isOptional": false
-        }
-      ],
-      "args": [
-        {
-          "name": "payer",
-          "type": "publicKey"
-        },
-        {
-          "name": "tokenMint",
-          "type": "publicKey"
-        }
-      ]
-    },
-    {
       "name": "add_vest",
       "accounts": [
         {
           "name": "dataAccount",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false,
           "isOptional": false
         },
@@ -213,6 +192,10 @@
         }
       ],
       "args": [
+        {
+          "name": "taker",
+          "type": "publicKey"
+        },
         {
           "name": "takerTokenAccount",
           "type": "publicKey"

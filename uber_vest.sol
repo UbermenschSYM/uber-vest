@@ -27,22 +27,6 @@ contract uber_vest {
     
     event msgAdr(address a);
 
-    // function create_pda_token_account(
-    //     address pda,
-    //     address pda_token_account
-    // ) public {
-
-    // }
-
-    function create_pda_token_account(
-        address payer,
-        address token_mint
-    ) public {
-        bytes1 bump;
-        (, bump) = find_pda();
-        
-    }
-
     function add_vest(
         address taker,
         address token_mint,
@@ -81,7 +65,7 @@ contract uber_vest {
         newVestData.amount_of_tokens = amount_of_tokens;
         newVestData.cliff = cliff;
         newVestData.interval = interval;
-        newVestData.last_claimed = block.timestamp;
+        newVestData.last_claimed = 0;
         newVestData.amount_per_claim = amount_per_claim;
         newVestData.creation_time = block.timestamp;
         vest_data_list[num] = newVestData;
@@ -96,7 +80,7 @@ contract uber_vest {
     }
 
     function claim_tokens(
-        // address taker,
+        address taker,
         address taker_token_account,
         address pda_token_account,
         address pda,
@@ -109,10 +93,10 @@ contract uber_vest {
         // check that pda really belongs to this program
         vestData storage data = vest_data_list[vest_id];
         uint64 current_time = block.timestamp;
-        // if(taker != data.taker) {
-        //     emit LogMessage(taker, data.taker, data.cliff);
-        //     revert();
-        // }
+        if(taker != data.taker) {
+            print("{}".format(num));
+            revert();
+        }
 
         if(data.creation_time + data.cliff > current_time) {
             revert();

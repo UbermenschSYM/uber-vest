@@ -75,7 +75,7 @@ export class UberVest {
             new BN(interval),
             new BN(amountPerClaim),
         ).accounts({
-            dataAccount: new PublicKey("Cw2wyxbtv4cy69VWi71RMMhspwRw9LTZBUvLF2qcwGk8"),
+            dataAccount: this.dataAccount,
         }).remainingAccounts([
             {pubkey: taker, isWritable: false, isSigner: false},
             {pubkey: tokenMint, isWritable: false, isSigner: false},
@@ -111,7 +111,7 @@ export class UberVest {
         vestId: number,
     ) {
         let tx = await this.program.methods.claimTokens(
-            // taker,
+            taker,
             takerTokenAccount,
             pdaTokenAccount,
             pda,
@@ -119,7 +119,7 @@ export class UberVest {
         ).accounts({
             dataAccount: this.dataAccount,
         }).remainingAccounts([
-            // {pubkey: this.wallet.publicKey, isWritable: true, isSigner: true},
+            {pubkey: this.wallet.publicKey, isWritable: true, isSigner: true},
             {pubkey: takerTokenAccount, isWritable: true, isSigner: false},
             {pubkey: pdaTokenAccount, isWritable: true, isSigner: false},
             {pubkey: pda, isWritable: true, isSigner: false},
